@@ -1,0 +1,24 @@
+version: '2.1'
+services:
+    ###################
+    ##    BACKEND    ##
+    ###################
+
+    eureka:
+        build:
+            context: .
+            dockerfile: docker/dockerfile.production
+        container_name: eureka
+        image: eureka
+        environment:
+            - JVM_OPTS=-Xmx512m -Xms512m
+            - PROFILE=${PROFILE}
+        ports:
+            - 9090:9090
+        healthcheck:
+            test: ['CMD', 'curl', '-f', 'http://localhost:9090/eureka/apps']
+            interval: 10s
+            timeout: 1s
+            retries: 10
+        env_file:
+            - .env
